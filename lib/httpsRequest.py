@@ -4,21 +4,14 @@ from __future__ import (division, print_function, absolute_import, unicode_liter
 __all__ = ["httpsRequest"]
 
 import os
+import sys
 import time
 import requests
 
-auth_id = None
-auth_secret = None
 base_url = "https://api.github.com"
 
-
 def getAuth():
-    global auth_id, auth_secret
-    if auth_id is None:
-        auth_id = os.environ["GH_CRAWLER_ID"]
-    if auth_secret is None:
-        auth_secret = os.environ["GH_CRAWLER_SECRET"]
-    return {"client_id": auth_id, "client_secret": auth_secret}
+    return {"client_id": os.environ['USERNAME'], "client_secret": os.environ['PASSWORD']}
 
 
 def httpsRequest(endpoint, method="GET", retries=0, **kwargs):
@@ -27,6 +20,7 @@ def httpsRequest(endpoint, method="GET", retries=0, **kwargs):
         "Accept": "application/vnd.github.v3+json",
         "User-Agent": "alanwooo/crawler",
     }
+    print (payload)
     try:
         r = getattr(requests, method.lower())(base_url + endpoint,
                                               params=payload,
