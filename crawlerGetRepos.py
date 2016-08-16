@@ -3,6 +3,7 @@
 from __future__ import (division, print_function, absolute_import, unicode_literals)
 
 import os
+import sys
 import time
 import json
 import traceback
@@ -32,6 +33,7 @@ def readConf():
     password = config.get('info', 'password').strip()
     if not ( username and password):
         print ("Please set the Username and Password in conf.")
+        sys.exit(1)
     os.environ['USERNAME'] = username
     os.environ['PASSWORD'] = password
 
@@ -49,6 +51,8 @@ client.getCollection('repositories')
 #client.getCollection('projects')
 
 while True:
+   print ('Starting from repositories %s ...' % str(SINCE), end = '')
+   sys.stdout.flush()
    try:
        repos = httpsRequest('/repositories', since = SINCE).json()
    except Exception as e:
@@ -60,8 +64,9 @@ while True:
        continue
 
    client.insertMultiRepos(repos)
-   print ('%s' % SINCE)
+
    saveProcess(SINCE)
 
    SINCE = int(repos[-1]['id'])
+   print ('Done!')
 

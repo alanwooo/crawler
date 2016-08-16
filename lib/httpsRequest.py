@@ -20,7 +20,7 @@ def httpsRequest(endpoint, method="GET", retries=0, **kwargs):
         "Accept": "application/vnd.github.v3+json",
         "User-Agent": "alanwooo/crawler",
     }
-    print (payload)
+
     try:
         r = getattr(requests, method.lower())(base_url + endpoint,
                                               params=payload,
